@@ -10,7 +10,7 @@
     html, body {
       margin: 0;
       height: 100%;
-      overflow: none; /* disable native scroll on desktop and mobile */
+      overflow: hidden; /* disable native scroll on desktop and mobile */
       overscroll-behavior: none; /* prevent pull-to-refresh and bounce */
       touch-action: none; /* disable native touch scrolling */
       background-color: #000;
@@ -143,12 +143,12 @@
 </header>
 
 <section id="home" class="active overlay">
-  <video autoplay loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+  <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
     <source src="media/gta6.mp4" type="video/mp4" />
   </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
     <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 drop-shadow-lg">
-      I am Srikanth
+      I am Srikanth.
     </h2>
     <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 drop-shadow">
       The name they mention in whispers.<span class="mobile-br"><br /></span> Calm face.<span class="mobile-br"><br /></span> Chaos inside.
@@ -160,7 +160,7 @@
 </section>
 
 <section>
-  <video autoplay loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+  <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
     <source src="media/cinematic-hack.mp4" type="video/mp4" />
   </video>
   <div class="overlay relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
@@ -286,40 +286,6 @@ Establishing connection...
     setActiveSection(1);
   });
 </script>
-<script>
-  function hideMobileAddressBar() {
-    if (document.documentElement.scrollHeight <= window.outerHeight / window.devicePixelRatio)
-      document.body.style.height = (window.outerHeight / window.devicePixelRatio) + 'px';
-
-    setTimeout(function () {
-      window.scrollTo(0, 1);
-    }, 50);
-  }
-
-  window.addEventListener("load", hideMobileAddressBar);
-  window.addEventListener("orientationchange", hideMobileAddressBar);
-  window.addEventListener("resize", hideMobileAddressBar);
-</script>
-<script>
-  function hideAddressBar() {
-    // Only run on mobile devices
-    if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
-
-    // Scroll down by 1px to hide address bar
-    window.scrollTo(0, 1);
-
-    // Sometimes delay and retry is needed
-    setTimeout(() => window.scrollTo(0, 1), 1000);
-  }
-
-  window.addEventListener('load', hideAddressBar);
-  window.addEventListener('resize', hideAddressBar);
-  window.addEventListener('orientationchange', hideAddressBar);
-</script>
-
-</body>
-</html>
-
 
 </body>
 </html>
