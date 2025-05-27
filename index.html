@@ -10,7 +10,7 @@
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden; /* disable native scroll */
+      overflow: hidden; /* disable native scroll on desktop */
       background-color: #000;
       color: #fff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -104,15 +104,26 @@
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    /* Mobile friendly text adjustments */
+    /* Mobile friendly text break helper */
     .mobile-br {
       display: none;
     }
 
+    /* MOBILE STYLES */
     @media (max-width: 640px) {
+      html, body {
+        overflow: auto; /* enable scrolling on mobile */
+        -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+      }
+
       /* Reduce main titles */
       .cinematic-title {
         font-size: 2.5rem !important;
+      }
+
+      /* Smaller header text "Srikanth" */
+      header h1.cinematic-title {
+        font-size: 1.5rem !important;
       }
 
       /* Smaller heading sizes */
@@ -169,7 +180,7 @@
       I am Srikanth.
     </h2>
     <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 drop-shadow">
-      The name they mention<br class="mobile-br" /> in whispers. Calm face.<br class="mobile-br" /> Chaos inside.
+      The name they mention in whispers.<span class="mobile-br"><br /></span> Calm face.<span class="mobile-br"><br /></span> Chaos inside.
     </p>
     <button id="toStory" class="bg-pink-600 px-8 py-3 rounded-full text-white text-lg hover:bg-pink-700 transition cursor-pointer">
       Step Inside
@@ -183,7 +194,7 @@
   </video>
   <div class="overlay relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
     <h2 id="plugged-in-text">
-      Everything changed<br class="mobile-br" /> when I plugged in.
+      Everything changed<span class="mobile-br"><br /></span> when I plugged in.
     </h2>
   </div>
 </section>
@@ -192,10 +203,7 @@
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">The Backstory</h2>
     <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8">
-      Grew up on chaos and pixels.<br class="mobile-br" />
-      Stories raised me.<br class="mobile-br" />
-      Games trained me.<br class="mobile-br" />
-      Now? I move like a ghost in the system — calm on the surface, calculated underneath.
+      Grew up on chaos and pixels.<span class="mobile-br"><br /></span> Stories raised me.<span class="mobile-br"><br /></span> Games trained me.<span class="mobile-br"><br /></span> Now? I move like a ghost in the system — calm on the surface,<span class="mobile-br"><br /></span> calculated underneath.
     </p>
     <img src="media/srikanth-silhouette.jpg" alt="Srikanth silhouette" class="w-72 h-auto rounded-xl shadow-xl" />
   </div>
@@ -205,14 +213,11 @@
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center bg-gray-900">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600">Skills? More Like Weapons.</h2>
     <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-6">
-      Strategy in my mind.<br class="mobile-br" />
-      Fire in my gameplay.<br class="mobile-br" />
-      Precision in my hacks.<br class="mobile-br" />
-      I don’t just do things — I make statements.
+      Strategy in my mind.<span class="mobile-br"><br /></span> Fire in my gameplay.<span class="mobile-br"><br /></span> Precision in my hacks.<span class="mobile-br"><br /></span> I don’t just do things — I make statements.
     </p>
     <div class="w-full max-w-2xl">
       <pre class="text-green-400 animate-pulse">
-> nmap -p- target.com
+&gt; nmap -p- target.com
 Scanning all 65535 ports...
 Found open port: 31337
 Establishing connection...
@@ -225,8 +230,7 @@ Establishing connection...
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">Talk Business</h2>
     <p class="max-w-xl text-lg text-gray-300 leading-relaxed">
-      If you’re here to pitch noise, keep moving.<br class="mobile-br" />
-      If you’re here to build an empire, you know where to find me.
+      If you’re here to pitch noise,<span class="mobile-br"><br /></span> keep moving.<span class="mobile-br"><br /></span> If you’re here to build an empire,<span class="mobile-br"><br /></span> you know where to find me.
     </p>
   </div>
 </section>
@@ -269,22 +273,18 @@ Establishing connection...
     }
   });
 
-  // Nav clicks jump directly to section
+  // Nav clicks jump directly
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
-      e.preventDefault();
       const idx = parseInt(e.target.dataset.index);
-      setActiveSection(idx);
+      if (!isNaN(idx)) setActiveSection(idx);
     });
   });
 
-  // Button in home to go to Backstory (index 2)
+  // Button on first page to go to backstory
   document.getElementById('toStory').addEventListener('click', () => {
     setActiveSection(2);
   });
-
-  // Initialize first section active
-  setActiveSection(0);
 </script>
 
 </body>
