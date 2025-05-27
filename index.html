@@ -286,6 +286,23 @@ Establishing connection...
     setActiveSection(1);
   });
 </script>
+<script>
+  function hideMobileAddressBar() {
+    if (document.documentElement.scrollHeight <= window.outerHeight / window.devicePixelRatio)
+      document.body.style.height = (window.outerHeight / window.devicePixelRatio) + 'px';
+
+    setTimeout(function () {
+      window.scrollTo(0, 1);
+    }, 50);
+  }
+
+  window.addEventListener("load", hideMobileAddressBar);
+  window.addEventListener("orientationchange", hideMobileAddressBar);
+  window.addEventListener("resize", hideMobileAddressBar);
+</script>
+</body>
+</html>
+
 
 </body>
 </html>
