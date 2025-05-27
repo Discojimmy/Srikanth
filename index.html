@@ -104,58 +104,23 @@
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
 
-    /* Mobile friendly text break helper */
-    .mobile-br {
-      display: none;
-    }
-
-    /* MOBILE STYLES */
+    /* MOBILE FRIENDLY STYLES */
     @media (max-width: 640px) {
       html, body {
-        overflow: auto; /* enable scrolling on mobile */
-        -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+        overflow: auto; /* enable scroll on mobile for better UX */
+        height: auto;
       }
-
-      /* Reduce main titles */
-      .cinematic-title {
-        font-size: 2.5rem !important;
-      }
-
-      /* Smaller header text "Srikanth" */
       header h1.cinematic-title {
-        font-size: 1.5rem !important;
+        font-size: 1.5rem; /* smaller header on mobile */
       }
-
-      /* Smaller heading sizes */
-      h2.text-5xl {
-        font-size: 2.5rem !important;
-      }
-      h2.text-4xl {
-        font-size: 2rem !important;
-      }
-
-      /* Smaller paragraph font size and max-width */
-      p {
-        font-size: 1rem !important;
-        max-width: 90% !important;
-      }
-
-      /* Adjust #plugged-in-text */
-      #plugged-in-text {
-        font-size: 2rem !important;
-        line-height: 1.2;
-      }
-
-      /* Add padding on sides */
-      section > div {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-      }
-
       /* Show mobile line breaks */
       .mobile-br {
         display: inline;
       }
+    }
+    /* Hide .mobile-br by default */
+    .mobile-br {
+      display: none;
     }
   </style>
 </head>
@@ -194,7 +159,7 @@
   </video>
   <div class="overlay relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
     <h2 id="plugged-in-text">
-      Everything changed<span class="mobile-br"><br /></span> when I plugged in.
+      Everything changed when I plugged in.
     </h2>
   </div>
 </section>
@@ -203,7 +168,7 @@
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">The Backstory</h2>
     <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8">
-      Grew up on chaos and pixels.<span class="mobile-br"><br /></span> Stories raised me.<span class="mobile-br"><br /></span> Games trained me.<span class="mobile-br"><br /></span> Now? I move like a ghost in the system — calm on the surface,<span class="mobile-br"><br /></span> calculated underneath.
+      Grew up on chaos and pixels.<span class="mobile-br"><br /></span> Stories raised me.<span class="mobile-br"><br /></span> Games trained me.<span class="mobile-br"><br /></span> Now? I move like a ghost in the system — calm on the surface, calculated underneath.
     </p>
     <img src="media/srikanth-silhouette.jpg" alt="Srikanth silhouette" class="w-72 h-auto rounded-xl shadow-xl" />
   </div>
@@ -217,7 +182,7 @@
     </p>
     <div class="w-full max-w-2xl">
       <pre class="text-green-400 animate-pulse">
-&gt; nmap -p- target.com
+> nmap -p- target.com
 Scanning all 65535 ports...
 Found open port: 31337
 Establishing connection...
@@ -230,7 +195,7 @@ Establishing connection...
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">Talk Business</h2>
     <p class="max-w-xl text-lg text-gray-300 leading-relaxed">
-      If you’re here to pitch noise,<span class="mobile-br"><br /></span> keep moving.<span class="mobile-br"><br /></span> If you’re here to build an empire,<span class="mobile-br"><br /></span> you know where to find me.
+      If you’re here to pitch noise, keep moving.<span class="mobile-br"><br /></span> If you’re here to build an empire, you know where to find me.
     </p>
   </div>
 </section>
@@ -251,20 +216,22 @@ Establishing connection...
       }
     });
     navLinks.forEach(link => link.classList.remove('active'));
-    // Match nav by data-index (sections at 0,2,4,6)
     for (let link of navLinks) {
       if (parseInt(link.dataset.index) === index) {
         link.classList.add('active');
       }
     }
     current = index;
+    // Scroll to top for accessibility & mobile native scroll
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Handle scroll wheel for section switching (throttled)
+  // Desktop scroll wheel
   window.addEventListener('wheel', e => {
+    if (window.innerWidth <= 640) return; // Disable wheel scroll on mobile to avoid conflicts
     if (isThrottled) return;
     isThrottled = true;
-    setTimeout(() => isThrottled = false, 1000); // 1s throttle
+    setTimeout(() => isThrottled = false, 1000);
 
     if (e.deltaY > 0) {
       setActiveSection(current + 1);
@@ -273,7 +240,7 @@ Establishing connection...
     }
   });
 
-  // Nav clicks jump directly
+  // Nav click
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
       const idx = parseInt(e.target.dataset.index);
@@ -281,10 +248,42 @@ Establishing connection...
     });
   });
 
-  // Button on first page to go to backstory
+  // Button click
   document.getElementById('toStory').addEventListener('click', () => {
     setActiveSection(2);
   });
+
+  // MOBILE SWIPE DETECTION
+  let touchStartY = 0;
+  let touchEndY = 0;
+
+  window.addEventListener('touchstart', e => {
+    touchStartY = e.changedTouches[0].screenY;
+  }, {passive: true});
+
+  window.addEventListener('touchend', e => {
+    touchEndY = e.changedTouches[0].screenY;
+    handleGesture();
+  }, {passive: true});
+
+  function handleGesture() {
+    if (window.innerWidth > 640) return; // Only for mobile
+    if (isThrottled) return;
+    let diff = touchStartY - touchEndY;
+
+    if (Math.abs(diff) < 50) return; // Ignore small swipes
+
+    isThrottled = true;
+    setTimeout(() => isThrottled = false, 1000);
+
+    if (diff > 0) {
+      // swipe up
+      setActiveSection(current + 1);
+    } else {
+      // swipe down
+      setActiveSection(current - 1);
+    }
+  }
 </script>
 
 </body>
