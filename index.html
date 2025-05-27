@@ -10,7 +10,9 @@
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden;
+      overflow: hidden; /* disable native scroll on desktop and mobile */
+      overscroll-behavior: none; /* prevent pull-to-refresh and bounce */
+      touch-action: none; /* disable native touch scrolling */
       background-color: #000;
       color: #fff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -70,8 +72,10 @@
       user-select: none;
     }
     nav a:hover, nav a.active {
-      color: #db2777;
+      color: #db2777; /* pink-600 */
     }
+
+    /* Zoom out reveal animation for second page text */
     @keyframes zoomOutReveal {
       0% {
         transform: scale(6);
@@ -82,6 +86,8 @@
         opacity: 1;
       }
     }
+
+    /* Text style on second page */
     #plugged-in-text {
       font-size: 4rem;
       text-align: center;
@@ -94,21 +100,24 @@
       transform: scale(6);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
+
+    /* Trigger animation when section active */
     section:nth-of-type(2).active #plugged-in-text {
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
+
+    /* MOBILE FRIENDLY STYLES */
     @media (max-width: 640px) {
-      html, body {
-        overflow: auto;
-        height: auto;
-      }
+      /* We keep no scroll, so no overflow:auto here */
       header h1.cinematic-title {
-        font-size: 1.5rem;
+        font-size: 1.5rem; /* smaller header on mobile */
       }
+      /* Show mobile line breaks */
       .mobile-br {
         display: inline;
       }
     }
+    /* Hide .mobile-br by default */
     .mobile-br {
       display: none;
     }
@@ -199,63 +208,76 @@ Establishing connection...
   function setActiveSection(index) {
     if (index < 0 || index >= sections.length) return;
     sections.forEach((sec, i) => {
-      sec.classList.toggle('active', i === index);
+      if (i === index) {
+        sec.classList.add('active');
+      } else {
+        sec.classList.remove('active');
+      }
     });
-    navLinks.forEach(link => {
-      link.classList.toggle('active', parseInt(link.dataset.index) === index);
-    });
+    navLinks.forEach(link => link.classList.remove('active'));
+    for (let link of navLinks) {
+      if (parseInt(link.dataset.index) === index) {
+        link.classList.add('active');
+      }
+    }
     current = index;
+    // Scroll to top for accessibility & mobile native scroll
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Desktop scroll wheel
   window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 640) return;
+    if (window.innerWidth < 640) return; // disable on mobile (we use touch)
     if (isThrottled) return;
     isThrottled = true;
-    setTimeout(() => isThrottled = false, 1000);
+    setTimeout(() => isThrottled = false, 1200);
     if (e.deltaY > 0) {
       setActiveSection(current + 1);
-    } else {
+    } else if (e.deltaY < 0) {
       setActiveSection(current - 1);
     }
   });
 
+  // Nav clicks
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
-      const idx = parseInt(e.target.dataset.index);
-      if (!isNaN(idx)) setActiveSection(idx);
+      e.preventDefault();
+      const index = parseInt(link.dataset.index);
+      setActiveSection(index);
     });
   });
 
-  document.getElementById('toStory').addEventListener('click', () => {
-    setActiveSection(2);
-  });
-
-  // MOBILE SWIPE DETECTION
+  // Touch swipe handling
   let touchStartY = 0;
   let touchEndY = 0;
 
   window.addEventListener('touchstart', e => {
     touchStartY = e.changedTouches[0].screenY;
-  }, {passive: true});
+  }, { passive: false });
 
   window.addEventListener('touchend', e => {
     touchEndY = e.changedTouches[0].screenY;
-    handleGesture();
-  }, {passive: true});
-
-  function handleGesture() {
-    if (window.innerWidth > 640 || isThrottled) return;
-    let diff = touchStartY - touchEndY;
-    if (Math.abs(diff) < 50) return;
+    const deltaY = touchStartY - touchEndY;
+    if (Math.abs(deltaY) < 40) return; // ignore tiny scrolls
+    if (isThrottled) return;
     isThrottled = true;
-    setTimeout(() => isThrottled = false, 1000);
-    if (diff > 0) {
-      setActiveSection(current + 1); // swipe up
+    setTimeout(() => isThrottled = false, 1200);
+    if (deltaY > 0) {
+      setActiveSection(current + 1);
     } else {
-      setActiveSection(current - 1); // swipe down
+      setActiveSection(current - 1);
     }
-  }
+  }, { passive: false });
+
+  // Disable native touchmove scrolling
+  window.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+  }, { passive: false });
+
+  // Button on first page for jumping to backstory
+  document.getElementById('toStory').addEventListener('click', () => {
+    setActiveSection(2);
+  });
 </script>
 
 </body>
