@@ -108,9 +108,16 @@
 
     /* MOBILE FRIENDLY STYLES */
     @media (max-width: 640px) {
+     header {
+       padding: 0.5rem 1rem; /* less padding on mobile for a smaller bar */
+     }
       /* We keep no scroll, so no overflow:auto here */
       header h1.cinematic-title {
-        font-size: 1.5rem; /* smaller header on mobile */
+        font-size: 1.3rem; /* smaller header on mobile */
+      }
+      nav a {
+        margin-left: 1rem; /* reduce spacing between nav links */
+        font-size: 0.8rem; /* smaller nav links */
       }
       /* Show mobile line breaks */
       .mobile-br {
