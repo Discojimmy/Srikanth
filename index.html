@@ -10,7 +10,7 @@
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden; /* disable native scroll on desktop */
+      overflow: hidden;
       background-color: #000;
       color: #fff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -70,10 +70,8 @@
       user-select: none;
     }
     nav a:hover, nav a.active {
-      color: #db2777; /* pink-600 */
+      color: #db2777;
     }
-
-    /* Zoom out reveal animation for second page text */
     @keyframes zoomOutReveal {
       0% {
         transform: scale(6);
@@ -84,8 +82,6 @@
         opacity: 1;
       }
     }
-
-    /* Text style on second page */
     #plugged-in-text {
       font-size: 4rem;
       text-align: center;
@@ -98,27 +94,21 @@
       transform: scale(6);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
-
-    /* Trigger animation when section active */
     section:nth-of-type(2).active #plugged-in-text {
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-
-    /* MOBILE FRIENDLY STYLES */
     @media (max-width: 640px) {
       html, body {
-        overflow: auto; /* enable scroll on mobile for better UX */
+        overflow: auto;
         height: auto;
       }
       header h1.cinematic-title {
-        font-size: 1.5rem; /* smaller header on mobile */
+        font-size: 1.5rem;
       }
-      /* Show mobile line breaks */
       .mobile-br {
         display: inline;
       }
     }
-    /* Hide .mobile-br by default */
     .mobile-br {
       display: none;
     }
@@ -209,38 +199,27 @@ Establishing connection...
   function setActiveSection(index) {
     if (index < 0 || index >= sections.length) return;
     sections.forEach((sec, i) => {
-      if (i === index) {
-        sec.classList.add('active');
-      } else {
-        sec.classList.remove('active');
-      }
+      sec.classList.toggle('active', i === index);
     });
-    navLinks.forEach(link => link.classList.remove('active'));
-    for (let link of navLinks) {
-      if (parseInt(link.dataset.index) === index) {
-        link.classList.add('active');
-      }
-    }
+    navLinks.forEach(link => {
+      link.classList.toggle('active', parseInt(link.dataset.index) === index);
+    });
     current = index;
-    // Scroll to top for accessibility & mobile native scroll
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Desktop scroll wheel
   window.addEventListener('wheel', e => {
-    if (window.innerWidth <= 640) return; // Disable wheel scroll on mobile to avoid conflicts
+    if (window.innerWidth <= 640) return;
     if (isThrottled) return;
     isThrottled = true;
     setTimeout(() => isThrottled = false, 1000);
-
     if (e.deltaY > 0) {
       setActiveSection(current + 1);
-    } else if (e.deltaY < 0) {
+    } else {
       setActiveSection(current - 1);
     }
   });
 
-  // Nav click
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
       const idx = parseInt(e.target.dataset.index);
@@ -248,7 +227,6 @@ Establishing connection...
     });
   });
 
-  // Button click
   document.getElementById('toStory').addEventListener('click', () => {
     setActiveSection(2);
   });
@@ -267,21 +245,15 @@ Establishing connection...
   }, {passive: true});
 
   function handleGesture() {
-    if (window.innerWidth > 640) return; // Only for mobile
-    if (isThrottled) return;
+    if (window.innerWidth > 640 || isThrottled) return;
     let diff = touchStartY - touchEndY;
-
-    if (Math.abs(diff) < 50) return; // Ignore small swipes
-
+    if (Math.abs(diff) < 50) return;
     isThrottled = true;
     setTimeout(() => isThrottled = false, 1000);
-
     if (diff > 0) {
-      // swipe up
-      setActiveSection(current + 1);
+      setActiveSection(current + 1); // swipe up
     } else {
-      // swipe down
-      setActiveSection(current - 1);
+      setActiveSection(current - 1); // swipe down
     }
   }
 </script>
