@@ -300,6 +300,23 @@ Establishing connection...
   window.addEventListener("orientationchange", hideMobileAddressBar);
   window.addEventListener("resize", hideMobileAddressBar);
 </script>
+<script>
+  function hideAddressBar() {
+    // Only run on mobile devices
+    if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) return;
+
+    // Scroll down by 1px to hide address bar
+    window.scrollTo(0, 1);
+
+    // Sometimes delay and retry is needed
+    setTimeout(() => window.scrollTo(0, 1), 1000);
+  }
+
+  window.addEventListener('load', hideAddressBar);
+  window.addEventListener('resize', hideAddressBar);
+  window.addEventListener('orientationchange', hideAddressBar);
+</script>
+
 </body>
 </html>
 
