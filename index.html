@@ -10,9 +10,9 @@
     html, body {
       margin: 0;
       height: 100%;
-      overflow: hidden; /* disable native scroll on desktop and mobile */
-      overscroll-behavior: none; /* prevent pull-to-refresh and bounce */
-      touch-action: none; /* disable native touch scrolling */
+      overflow: hidden;
+      overscroll-behavior: none;
+      touch-action: none;
       background-color: #000;
       color: #fff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -72,10 +72,8 @@
       user-select: none;
     }
     nav a:hover, nav a.active {
-      color: #db2777; /* pink-600 */
+      color: #db2777;
     }
-
-    /* Zoom out reveal animation for second page text */
     @keyframes zoomOutReveal {
       0% {
         transform: scale(6);
@@ -86,8 +84,6 @@
         opacity: 1;
       }
     }
-
-    /* Text style on second page */
     #plugged-in-text {
       font-size: 4rem;
       text-align: center;
@@ -100,31 +96,24 @@
       transform: scale(6);
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
-
-    /* Trigger animation when section active */
     section:nth-of-type(2).active #plugged-in-text {
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
     }
-
-    /* MOBILE FRIENDLY STYLES */
     @media (max-width: 640px) {
      header {
-       padding: 0.5rem 1rem; /* less padding on mobile for a smaller bar */
+       padding: 0.5rem 1rem;
      }
-      /* We keep no scroll, so no overflow:auto here */
       header h1.cinematic-title {
-        font-size: 1.3rem; /* smaller header on mobile */
+        font-size: 1.3rem;
       }
       nav a {
-        margin-left: 1rem; /* reduce spacing between nav links */
-        font-size: 0.8rem; /* smaller nav links */
+        margin-left: 1rem;
+        font-size: 0.8rem;
       }
-      /* Show mobile line breaks */
       .mobile-br {
         display: inline;
       }
     }
-    /* Hide .mobile-br by default */
     .mobile-br {
       display: none;
     }
@@ -141,6 +130,27 @@
     <a data-index="4">Contact</a>
   </nav>
 </header>
+
+<!-- ✅ Fully Working Toggle Switch - Fixed Bottom Right -->
+<div class="fixed bottom-6 right-6 z-50 flex items-center space-x-2">
+  <label class="relative inline-block w-14 h-8 cursor-pointer">
+    <!-- Hidden Checkbox -->
+    <input type="checkbox" id="videoToggle" class="sr-only peer" />
+
+    <!-- Toggle Track -->
+    <div class="w-14 h-8 bg-gray-700 rounded-full transition-colors duration-300 peer-checked:bg-pink-600"></div>
+
+    <!-- Sliding Dot -->
+    <div class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-300 transform peer-checked:translate-x-6"></div>
+  </label>
+
+  <!-- Text Label -->
+  <span class="text-sm font-medium text-white peer-checked:text-pink-500 transition">
+    Audio
+  </span>
+</div>
+
+
 
 <section id="home" class="active overlay">
   <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
@@ -170,7 +180,7 @@
   </div>
 </section>
 
-<section id="story" class="">
+<section id="story">
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">The Backstory</h2>
     <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8">
@@ -197,7 +207,7 @@ Establishing connection...
   </div>
 </section>
 
-<section id="contact" class="">
+<section id="contact">
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
     <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">Talk Business</h2>
     <p class="max-w-xl text-lg text-gray-300 leading-relaxed">
@@ -228,13 +238,12 @@ Establishing connection...
       }
     }
     current = index;
-    // Scroll to top for accessibility & mobile native scroll
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Desktop scroll wheel
+  // Desktop wheel
   window.addEventListener('wheel', e => {
-    if (window.innerWidth < 640) return; // disable on mobile (we use touch)
+    if (window.innerWidth < 640) return;
     if (isThrottled) return;
     isThrottled = true;
     setTimeout(() => isThrottled = false, 1200);
@@ -245,7 +254,6 @@ Establishing connection...
     }
   });
 
-  // Nav clicks
   navLinks.forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
@@ -254,7 +262,7 @@ Establishing connection...
     });
   });
 
-  // Touch swipe handling
+  // Touch
   let touchStartY = 0;
   let touchEndY = 0;
 
@@ -265,7 +273,7 @@ Establishing connection...
   window.addEventListener('touchend', e => {
     touchEndY = e.changedTouches[0].screenY;
     const deltaY = touchStartY - touchEndY;
-    if (Math.abs(deltaY) < 40) return; // ignore tiny scrolls
+    if (Math.abs(deltaY) < 40) return;
     if (isThrottled) return;
     isThrottled = true;
     setTimeout(() => isThrottled = false, 1200);
@@ -276,14 +284,24 @@ Establishing connection...
     }
   }, { passive: false });
 
-  // Disable native touchmove scrolling
   window.addEventListener('touchmove', function(e) {
     e.preventDefault();
   }, { passive: false });
 
-  // Button on first page for jumping to backstory
   document.getElementById('toStory').addEventListener('click', () => {
     setActiveSection(1);
+  });
+
+  // Audio toggle
+  const videoToggle = document.getElementById('videoToggle');
+  const mainVideo = document.querySelector('#home video');
+  videoToggle.addEventListener('change', () => {
+    if (videoToggle.checked) {
+      mainVideo.muted = false;
+      mainVideo.volume = 1;
+    } else {
+      mainVideo.muted = true;
+    }
   });
 </script>
 
