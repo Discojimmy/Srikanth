@@ -196,20 +196,6 @@ Establishing connection...
   let current = 0;
   let isThrottled = false;
 
-  // *** INTEGRATED CODE ***
-  const pluggedInText = document.getElementById('plugged-in-text');
-
-  function updatePluggedInText() {
-    if (current === 1) {
-      pluggedInText.style.opacity = '1';
-      pluggedInText.style.transform = 'scale(1)';
-    } else {
-      pluggedInText.style.opacity = '0';
-      pluggedInText.style.transform = 'scale(6)';
-    }
-  }
-  // *** END INTEGRATED CODE ***
-
   function setActiveSection(index) {
     if (index < 0 || index >= sections.length) return;
     sections.forEach((sec, i) => {
@@ -219,10 +205,6 @@ Establishing connection...
       link.classList.toggle('active', parseInt(link.dataset.index) === index);
     });
     current = index;
-
-    // *** CALL THE PLUGGED IN TEXT UPDATE ***
-    updatePluggedInText();
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
