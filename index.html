@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Srikanth — Cinematic Saga</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font: Cinzel -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet" />
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .cinematic-title {
+      font-family: 'Cinzel', serif;
+    }
+
+    .section {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 1s ease;
+      will-change: opacity, transform;
+    }
+
+    .section.reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    header {
+      backdrop-filter: saturate(180%) blur(20px);
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .text-shadow {
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    #menu-toggle:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+  <!-- Navbar -->
+  <header class="fixed top-0 w-full z-50 p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold cinematic-title tracking-widest uppercase">Srikanth</h1>
+    <button id="menu-toggle" class="md:hidden text-white text-3xl focus:outline-none">☰</button>
+    <nav id="menu" class="hidden md:flex space-x-8 text-lg uppercase tracking-wide font-semibold">
+      <a href="#home" class="hover:text-pink-600 transition">Home</a>
+      <a href="#story" class="hover:text-pink-600 transition">Backstory</a>
+      <a href="#skills" class="hover:text-pink-600 transition">Weapons</a>
+      <a href="#contact" class="hover:text-pink-600 transition">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="home" class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative overflow-hidden section">
+    <!-- Background Video -->
+    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-20">
+      <source src="gta6.mp4" type="video/mp4" />
+    </video>
+
+    <!-- Dark Overlay -->
+    <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 -z-10"></div>
+
+    <!-- Hero Text -->
+    <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 text-shadow">
+      I am Srikanth.
+    </h2>
+    <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 text-shadow">
+      The name they mention in whispers. Calm face. Chaos inside.
+    </p>
+    <a href="#story" class="bg-pink-600 px-8 py-3 rounded-full text-white text-lg hover:bg-pink-700 transition">
+      Step Inside
+    </a>
+  </section>
+
+  <!-- Backstory Section -->
+  <section id="story" class="section min-h-screen flex flex-col justify-center items-center px-6 text-center">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">The Backstory</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed">
+      Grew up on chaos and pixels. Stories raised me. Games trained me. Now? I move like a ghost in the system — calm on the surface, calculated underneath.
+    </p>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills" class="section min-h-screen flex flex-col justify-center items-center px-6 text-center bg-gray-900">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600">Skills? More Like Weapons.</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed">
+      Strategy in my mind. Fire in my gameplay. Precision in my hacks. I don’t just do things — I make statements.
+    </p>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="section min-h-screen flex flex-col justify-center items-center px-6 text-center">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">Talk Business</h2>
+    <p class="max-w-xl text-lg text-gray-300 leading-relaxed">
+      If you’re here to pitch noise, keep moving. If you’re here to build an empire, you know where to find me.
+    </p>
+  </section>
+
+  <!-- Scripts -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menu-toggle');
+    const menu = document.getElementById('menu');
+    menuToggle.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+
+    // Scroll reveal animation
+    const sections = document.querySelectorAll('.section');
+    function revealOnScroll() {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach(section => {
+        const top = section.getBoundingClientRect().top;
+        if (top < triggerBottom) {
+          section.classList.add('reveal');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+
+</body>
+</html>
