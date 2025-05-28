@@ -39,8 +39,12 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.5); /* Increased overlay darkness slightly */
       z-index: -1;
+    }
+    /* New 3D Text Shadow Effect */
+    .text-3d {
+        text-shadow: 0px 2px 4px rgba(0,0,0,0.8), 0px 3px 8px rgba(0,0,0,0.6);
     }
     pre {
       background-color: rgba(0, 0, 0, 0.5);
@@ -91,7 +95,7 @@
       color: white;
       mix-blend-mode: difference;
       text-transform: uppercase;
-      text-shadow: 0 0 5px rgba(0,0,0,0.7);
+      text-shadow: 0 0 10px rgba(0,0,0,0.9); /* Enhanced shadow */
       opacity: 0;
       transform: scale(6);
       transition: opacity 0.8s ease, transform 0.8s ease;
@@ -127,7 +131,6 @@
 </head>
 <body>
 
-<!-- 🔥 Loading Screen -->
 <div id="loader" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center transition-opacity duration-1000">
   <h1 class="text-5xl md:text-7xl text-white cinematic-title tracking-widest animate-pulse uppercase">
     Srikanth
@@ -144,7 +147,6 @@
   </nav>
 </header>
 
-<!-- ✅ Toggle Switch -->
 <div class="fixed bottom-6 right-6 z-50 flex items-center space-x-2">
   <label class="relative inline-block w-14 h-8 cursor-pointer">
     <input type="checkbox" id="videoToggle" class="sr-only peer" />
@@ -156,13 +158,13 @@
 
 <section id="home" class="active overlay">
   <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
-    <source src="media/gta6.mp4" type="video/mp4" />
+    <source src="media/1.mp4" type="video/mp4" />
   </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
-    <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 drop-shadow-lg">
+    <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 text-3d">
       The Saga Starts Here
     </h2>
-    <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 drop-shadow">
+    <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 text-3d">
       The name they mention in whispers.<span class="mobile-br"><br /></span> Calm face.<span class="mobile-br"><br /></span> Chaos inside.
     </p>
     <button id="toStory" class="bg-pink-600 px-8 py-3 rounded-full text-white text-lg hover:bg-pink-700 transition cursor-pointer">
@@ -171,31 +173,40 @@
   </div>
 </section>
 
-<section>
+<section class="overlay">
   <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
-    <source src="media/cinematic-hack.mp4" type="video/mp4" />
+    <source src="media/2.mp4" type="video/mp4" />
   </video>
-  <div class="overlay relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
+  <div class="relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
     <h2 id="plugged-in-text">
       Everything changed when I plugged in.
     </h2>
   </div>
 </section>
 
-<section id="story">
+<section id="story" class="overlay">
+    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+        <source src="media/3.mp4" type="video/mp4" />
+    </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">The Backstory</h2>
-    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d">The Backstory</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8 text-3d">
       Grew up on chaos and pixels.<span class="mobile-br"><br /></span> Stories raised me.<span class="mobile-br"><br /></span> Games trained me.<span class="mobile-br"><br /></span> Now? I move like a ghost in the system — calm on the surface, calculated underneath.
+<span class="mobile-br"><br /></span><br />
+  I saw the code beneath the world.<span class="mobile-br"><br /></span>
+  And I chose the red pill.
     </p>
-    <img src="media/srikanth-silhouette.jpg" alt="Srikanth silhouette" class="w-72 h-auto rounded-xl shadow-xl" />
+    
   </div>
 </section>
 
-<section>
-  <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center bg-gray-900">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600">Skills? More Like Weapons.</h2>
-    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-6">
+<section class="overlay">
+    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+        <source src="media/4.mp4" type="video/mp4" />
+    </video>
+  <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600 text-3d">Skills? More Like Weapons.</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-6 text-3d">
       Strategy in my mind.<span class="mobile-br"><br /></span> Fire in my gameplay.<span class="mobile-br"><br /></span> Precision in my hacks.<span class="mobile-br"><br /></span> I don’t just do things — I make statements.
     </p>
     <div class="w-full max-w-2xl">
@@ -209,10 +220,13 @@ Establishing connection...
   </div>
 </section>
 
-<section id="contact">
+<section id="contact" class="overlay">
+    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+        <source src="media/5.mp4" type="video/mp4" />
+    </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase">Talk Business</h2>
-    <p class="max-w-xl text-lg text-gray-300 leading-relaxed">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d">Talk Business</h2>
+    <p class="max-w-xl text-lg text-gray-300 leading-relaxed text-3d">
       If you’re here to pitch noise, keep moving.<span class="mobile-br"><br /></span> If you’re here to build an empire, you know where to find me.
     </p>
   </div>
@@ -315,7 +329,7 @@ Establishing connection...
     setTimeout(() => {
       loader.remove();
     }, 1000); // wait for fade animation
-  }, 2000); // delay before starting fade-out
+  }, 2500); // delay before starting fade-out
 });
 
 </script>
