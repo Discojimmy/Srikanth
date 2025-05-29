@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Srikanth — Cinematic Saga</title>
+  <title>Srikanth — Enter the Grid</title>
+  <link rel="icon" href="/media/favicon.svg" type="image/svg+xml" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet" />
   <style>
@@ -25,7 +26,7 @@
       top: 0; left: 0; width: 100%; height: 100vh;
       opacity: 0;
       transform: translateY(60px);
-      transition: all 1s ease;
+      transition: opacity 1s ease, transform 1s ease; /* Specified properties for clarity */
       pointer-events: none;
       overflow: hidden;
     }
@@ -39,10 +40,9 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5); /* Increased overlay darkness slightly */
+      background: rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
-    /* New 3D Text Shadow Effect */
     .text-3d {
         text-shadow: 0px 2px 4px rgba(0,0,0,0.8), 0px 3px 8px rgba(0,0,0,0.6);
     }
@@ -79,14 +79,8 @@
       color: #db2777;
     }
     @keyframes zoomOutReveal {
-      0% {
-        transform: scale(6);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+      0% { transform: scale(6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
     #plugged-in-text {
       font-size: 4rem;
@@ -95,10 +89,9 @@
       color: white;
       mix-blend-mode: difference;
       text-transform: uppercase;
-      text-shadow: 0 0 10px rgba(0,0,0,0.9); /* Enhanced shadow */
-      opacity: 0;
-      transform: scale(6);
-      transition: opacity 0.8s ease, transform 0.8s ease;
+      text-shadow: 0 0 10px rgba(0,0,0,0.9);
+      opacity: 0; /* Initial state handled by animation */
+      transform: scale(6); /* Initial state handled by animation */
     }
     section:nth-of-type(2).active #plugged-in-text {
       animation: zoomOutReveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
@@ -117,25 +110,80 @@
       .mobile-br {
         display: inline;
       }
+      #plugged-in-text { font-size: 2.5rem; }
     }
-    .mobile-br {
-      display: none;
+    .mobile-br { display: none; }
+    #loader.fade-out { opacity: 0; pointer-events: none; }
+
+    /* Nudge Animations */
+    @keyframes nudgeUp {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes nudgeDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+    section.active.nudge-up { animation: nudgeUp 0.5s ease-in-out; }
+    section.active.nudge-down { animation: nudgeDown 0.5s ease-in-out; }
+
+    /* NEW: Cinematic Text Appearance Animations */
+    .anim-on-active {
+      opacity: 0; /* Elements start hidden */
     }
 
-    /* Loader Fade Out */
-    #loader.fade-out {
-      opacity: 0;
-      pointer-events: none;
+    @keyframes anim-fadeInBottom {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes anim-fadeInExpand {
+      from { opacity: 0; letter-spacing: -0.08em; transform: scaleX(0.9); }
+      to { opacity: 1; letter-spacing: normal; transform: scaleX(1); }
+    }
+    @keyframes anim-zoomInSlightly {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    section.active .anim-title {
+      animation: anim-fadeInExpand 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+    }
+    section.active .anim-paragraph {
+      animation: anim-fadeInBottom 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+    }
+    section.active .anim-button,
+    section.active .anim-scroll-indicator {
+      animation: anim-fadeInBottom 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
+    }
+    section.active .anim-codeblock {
+      animation: anim-zoomInSlightly 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
     }
   </style>
 </head>
 <body>
 
 <div id="loader" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center transition-opacity duration-1000">
-  <h1 class="text-5xl md:text-7xl text-white cinematic-title tracking-widest animate-pulse uppercase">
-    Srikanth
-  </h1>
+  <div class="w-[480px] h-[120px] animate-pulse">
+    <svg viewBox="0 0 600 120" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <defs>
+        <filter id="textTexture" x="0%" y="0%" width="100%" height="100%">
+          <feTurbulence type="turbulence" baseFrequency="0.03" numOctaves="3" result="turbulence"/>
+          <feDisplacementMap in2="turbulence" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#000" />
+      <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+            font-family="'Cinzel', serif" font-size="72" fill="#e0dbc6"
+            filter="url(#textTexture)"
+            style="letter-spacing: 8px; text-transform: uppercase;">
+        SRIKANTH
+      </text>
+    </svg>
+  </div>
 </div>
+
+
 
 <header>
   <h1 class="text-2xl font-bold cinematic-title tracking-widest uppercase">Srikanth</h1>
@@ -161,55 +209,56 @@
     <source src="media/1.mp4" type="video/mp4" />
   </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
-    <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 text-3d">
+    <h2 class="text-5xl md:text-7xl font-extrabold cinematic-title tracking-widest uppercase mb-4 text-3d anim-on-active anim-title" style="animation-delay: 0.2s;">
       The Saga Starts Here
     </h2>
-    <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 text-3d">
+    <p class="text-xl md:text-2xl italic text-gray-300 max-w-xl mb-8 text-3d anim-on-active anim-paragraph" style="animation-delay: 0.5s;">
       The name they mention in whispers.<span class="mobile-br"><br /></span> Calm face.<span class="mobile-br"><br /></span> Chaos inside.
     </p>
-    <button id="toStory" class="bg-pink-600 px-8 py-3 rounded-full text-white text-lg hover:bg-pink-700 transition cursor-pointer">
+    <button id="toStory" class="bg-pink-600 px-8 py-3 rounded-full text-white text-lg hover:bg-pink-700 transition cursor-pointer anim-on-active anim-button" style="animation-delay: 0.8s;">
       Step Inside
     </button>
+    <div id="scroll-indicator" class="anim-on-active anim-scroll-indicator absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center cursor-pointer group" style="animation-delay: 1.1s;">
+      <svg class="w-8 h-8 text-white group-hover:text-pink-500 transition-colors animate-bounce" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+          <path d="M19 9l-7 7-7-7"></path>
+      </svg>
+      <span class="text-sm text-white mt-2 group-hover:text-pink-500 transition-colors">Scroll</span>
+    </div>
   </div>
 </section>
 
-<section class="overlay">
-  <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+<section class="overlay"> <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
     <source src="media/2.mp4" type="video/mp4" />
   </video>
   <div class="relative min-h-[60vh] flex justify-center items-center px-6 text-center" style="height:100vh;">
-    <h2 id="plugged-in-text">
-      Everything changed when I plugged in.
+    <h2 id="plugged-in-text"> Everything changed when I plugged in.
     </h2>
   </div>
 </section>
 
-<section id="story" class="overlay">
-    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+<section id="story" class="overlay"> <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
         <source src="media/3.mp4" type="video/mp4" />
     </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center relative">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d">The Backstory</h2>
-    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8 text-3d">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d anim-on-active anim-title" style="animation-delay: 0.2s;">The Backstory</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-8 text-3d anim-on-active anim-paragraph" style="animation-delay: 0.5s;">
       Grew up on chaos and pixels.<span class="mobile-br"><br /></span> Stories raised me.<span class="mobile-br"><br /></span> Games trained me.<span class="mobile-br"><br /></span> Now? I move like a ghost in the system — calm on the surface, calculated underneath.
 <span class="mobile-br"><br /></span><br />
   I saw the code beneath the world.<span class="mobile-br"><br /></span>
   And I chose the red pill.
     </p>
-    
   </div>
 </section>
 
-<section class="overlay">
-    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+<section class="overlay"> <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
         <source src="media/4.mp4" type="video/mp4" />
     </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600 text-3d">Skills? More Like Weapons.</h2>
-    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-6 text-3d">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-pink-600 text-3d anim-on-active anim-title" style="animation-delay: 0.2s;">Skills? More Like Weapons.</h2>
+    <p class="max-w-2xl text-lg text-gray-300 leading-relaxed mb-6 text-3d anim-on-active anim-paragraph" style="animation-delay: 0.5s;">
       Strategy in my mind.<span class="mobile-br"><br /></span> Fire in my gameplay.<span class="mobile-br"><br /></span> Precision in my hacks.<span class="mobile-br"><br /></span> I don’t just do things — I make statements.
     </p>
-    <div class="w-full max-w-2xl">
+    <div class="w-full max-w-2xl anim-on-active anim-codeblock" style="animation-delay: 0.8s;">
       <pre class="text-green-400 animate-pulse">
 > nmap -p- target.com
 Scanning all 65535 ports...
@@ -220,13 +269,12 @@ Establishing connection...
   </div>
 </section>
 
-<section id="contact" class="overlay">
-    <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
+<section id="contact" class="overlay"> <video autoplay muted loop class="absolute top-0 left-0 w-full h-full object-cover -z-10">
         <source src="media/5.mp4" type="video/mp4" />
     </video>
   <div class="pt-24 min-h-screen flex flex-col justify-center items-center px-6 text-center">
-    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d">Talk Business</h2>
-    <p class="max-w-xl text-lg text-gray-300 leading-relaxed text-3d">
+    <h2 class="text-4xl font-bold mb-6 cinematic-title tracking-wide uppercase text-3d anim-on-active anim-title" style="animation-delay: 0.2s;">Talk Business</h2>
+    <p class="max-w-xl text-lg text-gray-300 leading-relaxed text-3d anim-on-active anim-paragraph" style="animation-delay: 0.5s;">
       If you’re here to pitch noise, keep moving.<span class="mobile-br"><br /></span> If you’re here to build an empire, you know where to find me.
     </p>
   </div>
@@ -240,6 +288,15 @@ Establishing connection...
 
   function setActiveSection(index) {
     if (index < 0 || index >= sections.length) return;
+    
+    // Remove anim-on-active from elements in the outgoing section to reset them
+    if (sections[current]) {
+        sections[current].querySelectorAll('.anim-on-active').forEach(el => {
+            // No need to remove the class, as opacity:0 is the base.
+            // Animations are only applied if section.active is present.
+        });
+    }
+
     sections.forEach((sec, i) => {
       if (i === index) {
         sec.classList.add('active');
@@ -248,25 +305,34 @@ Establishing connection...
       }
     });
     navLinks.forEach(link => link.classList.remove('active'));
-    for (let link of navLinks) {
-      if (parseInt(link.dataset.index) === index) {
-        link.classList.add('active');
-      }
+    const activeNavLink = document.querySelector(`nav a[data-index="${index}"]`);
+    if (activeNavLink) {
+        activeNavLink.classList.add('active');
     }
     current = index;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // window.scrollTo({ top: 0, behavior: 'smooth' }); // Not strictly necessary with overflow:hidden and section positioning
   }
 
-  // Desktop scroll
   window.addEventListener('wheel', e => {
     if (window.innerWidth < 640) return;
     if (isThrottled) return;
     isThrottled = true;
-    setTimeout(() => isThrottled = false, 1200);
+    setTimeout(() => isThrottled = false, 1200); 
+
     if (e.deltaY > 0) {
-      setActiveSection(current + 1);
+      if (current < sections.length - 1) {
+        setActiveSection(current + 1);
+      } else {
+        sections[current].classList.add('nudge-down');
+        setTimeout(() => sections[current].classList.remove('nudge-down'), 500); 
+      }
     } else if (e.deltaY < 0) {
-      setActiveSection(current - 1);
+      if (current > 0) {
+        setActiveSection(current - 1);
+      } else {
+        sections[current].classList.add('nudge-up');
+        setTimeout(() => sections[current].classList.remove('nudge-up'), 500);
+      }
     }
   });
 
@@ -278,59 +344,85 @@ Establishing connection...
     });
   });
 
-  // Touch swipe
   let touchStartY = 0;
   let touchEndY = 0;
 
   window.addEventListener('touchstart', e => {
     touchStartY = e.changedTouches[0].screenY;
-  }, { passive: false });
+  }, { passive: true });
 
   window.addEventListener('touchend', e => {
     touchEndY = e.changedTouches[0].screenY;
-    const deltaY = touchStartY - touchEndY;
-    if (Math.abs(deltaY) < 40) return;
+    const deltaY = touchStartY - touchEndY; 
+    
+    if (Math.abs(deltaY) < 80) return;
     if (isThrottled) return;
     isThrottled = true;
-    setTimeout(() => isThrottled = false, 1200);
-    if (deltaY > 0) {
-      setActiveSection(current + 1);
-    } else {
-      setActiveSection(current - 1);
-    }
-  }, { passive: false });
+    setTimeout(() => isThrottled = false, 1800);
 
-  window.addEventListener('touchmove', function(e) {
-    e.preventDefault();
-  }, { passive: false });
+    if (deltaY > 0) {
+      if (current < sections.length - 1) {
+        setActiveSection(current + 1);
+      } else {
+        sections[current].classList.add('nudge-down');
+        setTimeout(() => sections[current].classList.remove('nudge-down'), 500);
+      }
+    } else { 
+      if (current > 0) {
+        setActiveSection(current - 1);
+      } else {
+        sections[current].classList.add('nudge-up');
+        setTimeout(() => sections[current].classList.remove('nudge-up'), 500);
+      }
+    }
+  }, { passive: true });
 
   document.getElementById('toStory').addEventListener('click', () => {
-    setActiveSection(1);
+    setActiveSection(1); // "Plugged In" section is index 1
   });
 
-  // Audio toggle
+  // NEW: Scroll Indicator click listener
+  const scrollIndicator = document.getElementById('scroll-indicator');
+  if (scrollIndicator) {
+    scrollIndicator.addEventListener('click', () => {
+      if (current < sections.length - 1) { // Ensure there's a next section
+         setActiveSection(current + 1);
+      }
+    });
+  }
+
   const videoToggle = document.getElementById('videoToggle');
-  const mainVideo = document.querySelector('#home video');
+  const allVideos = document.querySelectorAll('section video');
+  
   videoToggle.addEventListener('change', () => {
-    if (videoToggle.checked) {
-      mainVideo.muted = false;
-      mainVideo.volume = 1;
-    } else {
-      mainVideo.muted = true;
-    }
+    const isAudioEnabled = videoToggle.checked;
+    allVideos.forEach(video => {
+      video.muted = !isAudioEnabled;
+      if (isAudioEnabled) {
+        video.volume = 1; 
+      }
+    });
   });
 
-  // Loader fade out
   window.addEventListener('load', () => {
-  const loader = document.getElementById('loader');
-  // Add 2.5s delay before fade-out starts
-  setTimeout(() => {
-    loader.classList.add('fade-out');
+    const loader = document.getElementById('loader');
     setTimeout(() => {
-      loader.remove();
-    }, 1000); // wait for fade animation
-  }, 2500); // delay before starting fade-out
-});
+      loader.classList.add('fade-out');
+      setTimeout(() => {
+        if(loader) loader.remove();
+      }, 1000); 
+    }, 2500); 
+    
+    // Ensure initial active section's elements are ready for animation if needed
+    // (already handled by CSS `section.active .anim-X`)
+    // setActiveSection(0); // Call to ensure nav link is correctly styled if not default
+  });
+
+  // Initial setup for nav active state on load
+  // The nav link for index 0 already has 'active' class by default in HTML.
+  // If you want to be absolutely sure:
+  // setActiveSection(0); // but this might re-trigger animations if not careful.
+  // It's generally fine as is.
 
 </script>
 
